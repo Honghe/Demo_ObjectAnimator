@@ -24,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
     private ObjectAnimator animator2;
     private ObjectAnimator animator;
     int duration = 5000;
-    private int layoutLeft;
     private int layoutWidth;
     boolean trigger = false;
 
@@ -50,13 +49,17 @@ public class MainActivity extends AppCompatActivity {
 
     protected void autoAnimate() {
         layoutWidth = layout.getWidth();
-        layoutLeft = layout.getLeft();
-        textView2.setTranslationX(-textView2.getWidth());
-        animate(-textView1.getWidth());
+        animatorInit();
+        animator2Init();
+        animate();
     }
 
-    private void animate(int startPosition) {
-        textView1.setTranslationX(startPosition);
+    private void animate() {
+        animator.start();
+    }
+
+    private void animatorInit() {
+        textView1.setTranslationX(-textView1.getWidth());
         float curTranslationX = textView1.getTranslationX();
         animator = ObjectAnimator.ofFloat(textView1, "translationX", curTranslationX,
                 layoutWidth);
@@ -83,10 +86,13 @@ public class MainActivity extends AppCompatActivity {
         animator.setInterpolator(new LinearInterpolator());
         animator.setDuration(duration);
         animator.setRepeatCount(ObjectAnimator.INFINITE);
-        animator.start();
     }
 
     private void animate2() {
+        animator2.start();
+    }
+
+    private void animator2Init() {
         textView2.setTranslationX(-textView2.getWidth());
         float curTranslationX2 = textView2.getTranslationX();
         animator2 = ObjectAnimator.ofFloat(textView2, "translationX", curTranslationX2,
@@ -99,7 +105,6 @@ public class MainActivity extends AppCompatActivity {
         });
         animator2.setDuration(duration);
         animator2.setInterpolator(new LinearInterpolator());
-        animator2.start();
     }
 
 
