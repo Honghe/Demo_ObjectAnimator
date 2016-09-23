@@ -13,14 +13,14 @@
 
     <ImageView
         android:id="@+id/text1"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#ffaa88ff"
         android:src="@mipmap/ic_launcher"/>
 
     <ImageView
         android:id="@+id/text2"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#ff3344cc"
         android:src="@mipmap/ic_launcher"/>

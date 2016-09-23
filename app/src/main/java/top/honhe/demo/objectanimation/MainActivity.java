@@ -1,5 +1,7 @@
 package top.honhe.demo.objectanimation;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.os.Bundle;
@@ -24,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     int duration = 5000;
     private int layoutLeft;
     private int layoutWidth;
+    boolean trigger = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,13 +51,16 @@ public class MainActivity extends AppCompatActivity {
     protected void autoAnimate() {
         layoutWidth = layout.getWidth();
         layoutLeft = layout.getLeft();
+        textView2.setTranslationX(-textView2.getWidth());
+        animate(-textView1.getWidth());
+    }
 
-        textView1.setTranslationX(layoutLeft - textView1.getWidth());
+    private void animate(int startPosition) {
+        textView1.setTranslationX(startPosition);
         float curTranslationX = textView1.getTranslationX();
         animator = ObjectAnimator.ofFloat(textView1, "translationX", curTranslationX,
-                layoutWidth + 2 * textView1.getWidth() + 10 + curTranslationX);
+                layoutWidth);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            boolean trigger = false;
 
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -67,21 +73,24 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+                super.onAnimationRepeat(animation);
+                trigger = false;
+            }
+        });
         animator.setInterpolator(new LinearInterpolator());
         animator.setDuration(duration);
-
-        animate();
-    }
-
-    private void animate() {
+        animator.setRepeatCount(ObjectAnimator.INFINITE);
         animator.start();
     }
 
     private void animate2() {
-        textView2.setTranslationX(textView1.getTranslationX() - textView1.getWidth());
+        textView2.setTranslationX(-textView2.getWidth());
         float curTranslationX2 = textView2.getTranslationX();
         animator2 = ObjectAnimator.ofFloat(textView2, "translationX", curTranslationX2,
-                layoutWidth + 2 * textView2.getWidth() + 10 + curTranslationX2);
+                layoutWidth);
         animator2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -91,6 +100,14 @@ public class MainActivity extends AppCompatActivity {
         animator2.setDuration(duration);
         animator2.setInterpolator(new LinearInterpolator());
         animator2.start();
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        animator.end();
+        animator2.end();
     }
 
     @Override
